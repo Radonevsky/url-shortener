@@ -1,0 +1,13 @@
+# IDE
+.idea/
+*.iml
+
+# local config
+config/local.yaml
+
+# database
+*.db
+
+# binaries
+bin/
+build/
