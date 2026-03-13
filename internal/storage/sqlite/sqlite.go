@@ -3,8 +3,9 @@ package sqlite
 import (
 	"database/sql"
 	"fmt"
-	"github.com/mattn/go-sqlite3"
 	"url-shortener/internal/storage"
+
+	"github.com/mattn/go-sqlite3"
 )
 
 type Storage struct {
@@ -98,4 +99,16 @@ func (s *Storage) DeleteURL(alias string) error {
 	}
 
 	return nil
+}
+
+func (s *Storage) AliasExists(alias string) (bool, error) {
+	const op = "storage.sqlite.URLExists"
+
+	var exists bool
+	err := s.db.QueryRow("SELECT EXISTS(SELECT 1 FROM url WHERE alias = ?)", alias).Scan(&exists)
+	if err != nil {
+		return false, fmt.Errorf("%s: %w", op, err)
+	}
+
+	return exists, nil
 }
